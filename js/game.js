@@ -1,23 +1,16 @@
-/*
- * Author: Jerome Renaux
- * E-mail: jerome.renaux@gmail.com
- */
 
 var Game = {}
-var isConnected = false
 Game.preload = function() {
     this.load.image('win', 'assets/you-win.png')
 }
-// var num_keys = 'ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,NUMPAD_ZERO,NUMPAD_ONE,NUMPAD_TWO,NUMPAD_THREE,NUMPAD_FOUR,NUMPAD_FIVE,NUMPAD_SIX,NUMPAD_SEVEN,NUMPAD_EIGHT,NUMPAD_NINE'
-// var num_keys_arr = num_keys.split(',')
-// var keys
 var scene
-Game.connect_matrix
-Game.current_turn
+Game.connect_matrix = []
+Game.current_turn = ''
+Game.winner = ''
 Game.create = function(){
     Client.askNewId()
     scene = this
-    if(isConnected){
+    if(Game.isConnected){
         Game.newGame(false)
     } else {
         new_game_text = scene.add.text(-110,-20, '', { font: '48px Arial bold', fill: '#000000' })
@@ -73,27 +66,12 @@ Game.newGame = function(join){
             graphics.fillCircleShape(circles[x][y])
         }
     }
-    graphics.setData('winner', 0)
     scene.input.on('pointerdown', function (pointer) {
-        if(graphics.getData('winner')==0 && Game.current_turn == Client.my.id){
+        if(Game.winner == '' && Game.current_turn == Client.my.id){
+            console.log(Game.current_turn, Client.my.id)
             var x = Math.floor(pointer.x / 100)
-            var y = Math.floor(pointer.y / 100)
-            var winner = Game.movePlayer(x)
+            Game.movePlayer(x)
             Client.movePlayer(x)
-            if( winner !=undefined){
-                graphics.setData('winner', winner)
-                var win = scene.add.image(300, 300, 'win')
-                win.setScale(0.5)
-                new_game_rect = scene.add.rectangle(0,0, 300, 80, 0xf47742)
-                new_game_text = scene.add.text(-110,-20, '', { font: '48px Arial bold', fill: '#0f0f00' })
-                new_game_text.setText('New Game')
-                new_game_container = scene.add.container(300, 500, [ new_game_rect, new_game_text ])
-                new_game_container.setSize(new_game_rect.width, new_game_rect.height)
-                new_game_container.setInteractive()
-                .on('pointerdown', function(){
-                    scene.scene.restart()
-                })
-            }
         }
     })
 }
@@ -119,8 +97,27 @@ Game.movePlayer = function(x){
             return false
         }
     }
-    var winner = Game.find4()
-    return winner
+    Game.winner = Game.find4()
+
+    if( Game.winner != ''){
+        var popupImage;
+        if(Game.winner == Client.my.id){
+            popupImage = scene.add.image(300, 300, 'win')
+        } else {
+            
+            popupImage = scene.add.image(300, 300, 'lose')
+        }
+        popupImage.setScale(0.5)
+        new_game_rect = scene.add.rectangle(0,0, 300, 80, 0xf47742)
+        new_game_text = scene.add.text(-110,-20, '', { font: '48px Arial bold', fill: '#0f0f00' })
+        new_game_text.setText('New Game')
+        new_game_container = scene.add.container(300, 500, [ new_game_rect, new_game_text ])
+        new_game_container.setSize(new_game_rect.width, new_game_rect.height)
+        new_game_container.setInteractive()
+        .on('pointerdown', function(){
+            scene.scene.restart()
+        })
+    }
 }
 
 Game.find4 = function(){
@@ -159,4 +156,5 @@ Game.find4 = function(){
             }               
         }
     }
+    return ''
 }
