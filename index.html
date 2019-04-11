@@ -28,7 +28,7 @@
             </div>
         </div>
         <div style="padding-top:10px; padding-bottom:10px;" id="game"></div>
-        <form class="overlay" onsubmit="Client.join(event)">
+        <form onsubmit="Client.join(event)">
             <div class="input-group col-lg-3">
                 <input type="text" class="form-control" id="join-id">
                 <div class="input-group-btn">
@@ -44,9 +44,5 @@
 <script src="js/main.js" type="text/javascript"></script>
 <script src="js/client.js" type="text/javascript"></script>
 <style>
-    .overlay {
-        position: absolute;
-        z-index: 1000;
-    }
 </style>
 </html>

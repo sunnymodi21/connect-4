@@ -13,18 +13,14 @@ Game.create = function(){
     scene = this
     if(Game.isConnected){
         Game.newGame(false)
-    } else {
-        new_game_text = scene.add.text(-110,-20, '', { font: '48px Arial bold', fill: '#000000' })
-        new_game_text.setText('New Game')
-        new_game_container = scene.add.container(300, 500, [ new_game_text ])
-        new_game_container.setSize(new_game_text.width, new_game_text.height)
-        new_game_container.setInteractive()
-        .on('pointerdown', function(pointer, localX, localY, event){
-            Game.newGame(false)
-            event.stopPropagation()
-            new_game_container.destroy()
-        })
     }
+        
+    Game.turn = scene.add.text(10, 550, 'Waiting for other player', { font: '48px Arial bold', fill: '#0f0f00' })
+    Game.turn.on('setdata', function () {
+        Game.turn.setText([
+            Game.turn.getData('turn')
+        ])
+    })
 }
 
 Game.newGame = function(join){
@@ -36,18 +32,12 @@ Game.newGame = function(join){
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]
     ]
-    scene.add.displayList.removeAll()
     var graphics = scene.add.graphics({ fillStyle: { color: 0xDCDCDC } })
-    var text = scene.add.text(250, 600, '', { font: '48px Arial bold', fill: '#0f0f00' })
-    text.on('setdata', function () {
-        text.setText([
-            text.getData('name')
-        ])
-    })
-    text.setData('name', 'Your turn')
     if(join == true){
+        Game.turn.setData('turn', 'Waiting for other player')
         Game.current_turn = Client.otherPlayer.id
     } else {
+        Game.turn.setData('turn', 'Your turn')
         Game.current_turn = Client.my.id
     }
     var circles = []
@@ -57,7 +47,7 @@ Game.newGame = function(join){
         circles[x] = [];
         for(var y = 0; y < 6; y++)
         {
-            circles[x][y] = new Phaser.Geom.Circle(50 + x * 100, 50 + y * 100, 45);
+            circles[x][y] = new Phaser.Geom.Circle(45 + x * 90, 45 + y * 90, 40);
         }
     }
     for(var x = 0; x < 7; x++)
@@ -83,13 +73,15 @@ Game.movePlayer = function(x){
             if(Game.connect_matrix[y][x]==0){
                 if(Game.current_turn==Client.my.id){                                
                     Game.connect_matrix[y][x] = Game.current_turn
-                    scene.add.circle(50 + x * 100, 50 + y * 100, 45, Client.my.color)
+                    scene.add.circle(45 + x * 90, 45 + y * 90, 40, Client.my.color)
                     Game.current_turn=Client.otherPlayer.id
+                    Game.turn.setData('turn', 'Waiting for other player')
                     break
                 } else {
                     Game.connect_matrix[y][x]=Game.current_turn
-                    scene.add.circle(50 + x * 100, 50 + y * 100, 45, Client.otherPlayer.color)
+                    scene.add.circle(45 + x * 90, 45 + y * 90, 40, Client.otherPlayer.color)
                     Game.current_turn = Client.my.id
+                    Game.turn.setData('turn', 'Your turn')
                     break
                 }
             }
@@ -101,9 +93,6 @@ Game.movePlayer = function(x){
     Game.winner = Game.find4()
 
     if( Game.winner != ''){
-        
-        console.log(Game.connect_matrix)
-        console.log(Game.winner, Client.my.id)
         var popupImage;
         if(Game.winner == Client.my.id){
             console.log('win')
