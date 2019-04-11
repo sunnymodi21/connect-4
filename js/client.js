@@ -7,7 +7,7 @@ Client.isConnected = false
 Client.copyId = function(){
     $('#user-id').select()
     document.execCommand('copy')
-    alert('Copied')
+    // alert('Copied')
 }
 
 Client.askNewId = function(){
@@ -16,9 +16,9 @@ Client.askNewId = function(){
 
 Client.join = function(e){
     e.preventDefault()
-    var id =$('#join-id')
-    Client.socket.emit('join',{id:id.value})
-    Client.otherPlayer.id = id.value
+    var id = $('#join-id').val()
+    Client.socket.emit('join',{id:id})
+    Client.otherPlayer.id = id
     Client.otherPlayer.color = 0xFF0000
     Client.my.color = 0xFFFF33
     Client.isConnected = true 
@@ -45,6 +45,7 @@ Client.socket.on('join',function(id){
     Client.otherPlayer.id = id
     Client.otherPlayer.color = 0xFFFF33
     Client.my.color = 0xFF0000
+    Game.newGame(false)
 })
 
 Client.socket.on('disconnect',function(id){

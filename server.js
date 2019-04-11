@@ -23,7 +23,6 @@ io.on('connection',function(socket){
     socket.on('join',function(data){          
         //Data = host id
         //Sends id of guest to host
-        console.log(data)
         socket.to(data.id).emit('join',socket.id)
     })
     

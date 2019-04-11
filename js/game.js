@@ -2,6 +2,7 @@
 var Game = {}
 Game.preload = function() {
     this.load.image('win', 'assets/you-win.png')
+    this.load.image('lose', 'assets/lose.png')
 }
 var scene
 Game.connect_matrix = []
@@ -67,8 +68,8 @@ Game.newGame = function(join){
         }
     }
     scene.input.on('pointerdown', function (pointer) {
+        // console.log(Game.current_turn, Client.my.id)
         if(Game.winner == '' && Game.current_turn == Client.my.id){
-            console.log(Game.current_turn, Client.my.id)
             var x = Math.floor(pointer.x / 100)
             Game.movePlayer(x)
             Client.movePlayer(x)
@@ -81,7 +82,7 @@ Game.movePlayer = function(x){
         if(Game.connect_matrix[y] != undefined){
             if(Game.connect_matrix[y][x]==0){
                 if(Game.current_turn==Client.my.id){                                
-                    Game.connect_matrix[y][x]=1
+                    Game.connect_matrix[y][x] = Game.current_turn
                     scene.add.circle(50 + x * 100, 50 + y * 100, 45, Client.my.color)
                     Game.current_turn=Client.otherPlayer.id
                     break
@@ -100,11 +101,15 @@ Game.movePlayer = function(x){
     Game.winner = Game.find4()
 
     if( Game.winner != ''){
+        
+        console.log(Game.connect_matrix)
+        console.log(Game.winner, Client.my.id)
         var popupImage;
         if(Game.winner == Client.my.id){
+            console.log('win')
             popupImage = scene.add.image(300, 300, 'win')
         } else {
-            
+            console.log('lose')
             popupImage = scene.add.image(300, 300, 'lose')
         }
         popupImage.setScale(0.5)
