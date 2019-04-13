@@ -16,13 +16,18 @@ Client.askNewId = function(){
 
 Client.join = function(e){
     e.preventDefault()
-    var id = $('#join-id').val()
-    Client.socket.emit('join',{id:id})
-    Client.otherPlayer.id = id
-    Client.otherPlayer.color = 0xFF0000
-    Client.my.color = 0xFFFF33
-    Client.isConnected = true 
-    Game.newGame(true)    
+    if(!Client.isConnected){
+        var id = $('#join-id').val()
+        Client.socket.emit('join',{id:id}, function(success){
+            if(success){
+                Client.otherPlayer.id = id
+                Client.otherPlayer.color = 0xFF0000
+                Client.my.color = 0xFFFF33
+                Client.isConnected = true 
+                Game.newGame(true)
+            }
+        })
+    }
 }
 
 Client.movePlayer = function(x){
@@ -40,15 +45,17 @@ Client.socket.on('move',function(data){
 })
 
 Client.socket.on('join',function(id){
-    Client.isConnected = true
-    console.log(id)
-    Client.otherPlayer.id = id
-    Client.otherPlayer.color = 0xFFFF33
-    Client.my.color = 0xFF0000
-    Game.newGame(false)
+    if(!Client.isConnected){
+        Client.isConnected = true
+        console.log(id)
+        Client.otherPlayer.id = id
+        Client.otherPlayer.color = 0xFFFF33
+        Client.my.color = 0xFF0000
+        Game.newGame(false)
+    }
 })
 
-Client.socket.on('disconnect',function(id){
+Client.socket.on('disconnect-player',function(){
     Client.isConnected = false
     Client.otherPlayer.id = ''
 })
