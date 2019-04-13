@@ -14,16 +14,22 @@ app.get('/',function(req,res){
 server.listen(process.env.PORT || 8081,function(){
     console.log('Listening on '+server.address().port)
 })
-
+var connectionDict = {}
 io.on('connection',function(socket){
     socket.on('get-id',function(data){
         socket.emit('get-id',socket.id)
+        connectionDict[socket.id] = ''
     })
 
-    socket.on('join',function(data){          
-        //Data = host id
-        //Sends id of guest to host
+    socket.on('join',function(data, fn){    
         socket.to(data.id).emit('join',socket.id)
+        if(connectionDict[data.id] == ''){
+            fn(true)
+            connectionDict[data.id] = socket.id
+            connectionDict[socket.id] = data.id
+        } else {
+            fn(false)
+        }
     })
     
     socket.on('move', function(data){
@@ -34,7 +40,11 @@ io.on('connection',function(socket){
         socket.to(data.id).emit('win', data)
     })
     
-    socket.on('test',function(){
-        console.log('test received')
-    })
+    socket.on('disconnect', function () {
+        if(connectionDict[socket.id] != undefined && connectionDict[connectionDict[socket.id]] != undefined){
+            socket.to(connectionDict[socket.id]).emit('disconnect-player')
+            connectionDict[connectionDict[socket.id]] = ''
+            delete connectionDict[socket.id]
+        }
+    });
 })
