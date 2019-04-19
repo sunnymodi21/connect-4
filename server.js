@@ -41,9 +41,11 @@ io.on('connection',function(socket){
     })
     
     socket.on('disconnect', function () {
-        if(connectionDict[socket.id] != undefined && connectionDict[connectionDict[socket.id]] != undefined){
+        if(connectionDict[socket.id] != ''){
             socket.to(connectionDict[socket.id]).emit('disconnect-player')
             connectionDict[connectionDict[socket.id]] = ''
+            delete connectionDict[socket.id]
+        } else {
             delete connectionDict[socket.id]
         }
     });

@@ -5,9 +5,7 @@ Client.my = {}
 Client.isConnected = false
 
 Client.copyId = function(){
-    $('#user-id').select()
-    document.execCommand('copy')
-    // alert('Copied')
+    navigator.clipboard.writeText($('#user-id').text())
 }
 
 Client.askNewId = function(){
@@ -16,8 +14,8 @@ Client.askNewId = function(){
 
 Client.join = function(e){
     e.preventDefault()
-    if(!Client.isConnected){
-        var id = $('#join-id').val()
+    var id = $('#join-id').val()
+    if(id!='' && id!=Client.my.id && !Client.isConnected){
         Client.socket.emit('join',{id:id}, function(success){
             if(success){
                 Client.otherPlayer.id = id
@@ -36,7 +34,7 @@ Client.movePlayer = function(x){
 
 Client.socket.on('get-id',function(data){
     console.log(data)
-    $('#user-id').val(data)
+    $('#user-id').text(data)
     Client.my.id = data
 })
 
