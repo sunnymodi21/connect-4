@@ -6,6 +6,8 @@ Client.isConnected = false
 
 Client.copyId = function(){
     navigator.clipboard.writeText($('#user-id').text())
+    $('#copy-text').show()
+    setTimeout(function(){ $('#copy-text').hide() }, 2000)
 }
 
 Client.askNewId = function(){

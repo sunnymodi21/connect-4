@@ -13,14 +13,16 @@
 <body>
     <div style="padding-left:200px">
         <div>
-            <div class="input-group col-sm-4">
+            <div onclick="Client.copyId()"  class="input-group col-sm-4">
                 <text type="text" class="form-control" id="user-id"></text>
                 <div class="input-group-btn">
-                    <button class="btn btn-default" onclick="Client.copyId()" id="copy" value="User" type="button">
+                    <button class="btn btn-default" id="copy" value="User" type="button">
                         <i class="glyphicon glyphicon-copy"></i>
                     </button>
                 </div>
+                
             </div>
+            <text type="text" style="padding-left:10px;" hidden id="copy-text">Copied</text>
         </div>
         <div style="padding-top:10px; padding-bottom:10px;" id="game"></div>
         <form onsubmit="Client.join(event)">
