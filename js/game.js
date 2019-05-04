@@ -75,7 +75,9 @@ Game.movePlayer = function(x){
                     break
                 } else {
                     Game.connect_matrix[y][x]=Game.current_turn
-                    scene.add.circle(45 + x * 90, 45 + y * 90, 40, Client.otherPlayer.color)
+                    scene.add.circle(45 + x * 90, 45 + y * 90, 40, 0x00FFF)
+                    scene.add.circle(45 + x * 90, 45 + y * 90, 36, Client.otherPlayer.color)
+                    setTimeout(function(){ scene.add.circle(45 + x * 90, 45 + y * 90, 40, Client.otherPlayer.color)}, 6000)
                     Game.current_turn = Client.my.id
                     Game.turn.setText(['Your turn'])
                     break
