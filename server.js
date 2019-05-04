@@ -2,7 +2,8 @@ var express = require('express')
 var app = express()
 var server = require('http').Server(app)
 var io = require('socket.io').listen(server)
-
+var Mongdb = require('./js/database')
+  
 app.use('/css',express.static(__dirname + '/css'))
 app.use('/js',express.static(__dirname + '/js'))
 app.use('/assets',express.static(__dirname + '/assets'))
@@ -40,7 +41,7 @@ io.on('connection',function(socket){
         socket.to(data.id).emit('win', data)
     })
     
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function (){
         if(connectionDict[socket.id] != ''){
             socket.to(connectionDict[socket.id]).emit('disconnect-player')
             connectionDict[connectionDict[socket.id]] = ''
@@ -48,5 +49,7 @@ io.on('connection',function(socket){
         } else {
             delete connectionDict[socket.id]
         }
-    });
+    })
+    
+
 })
