@@ -18,14 +18,10 @@
     "Node.js",
     "socket.io"
   ],
-  "author": "Jerome Renaux",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Jerenaux/basic-mmo-phaser/issues"
-  },
-  "homepage": "https://github.com/Jerenaux/basic-mmo-phaser#readme",
   "dependencies": {
     "express": "^4.15.2",
+    "mongodb": "^3.2.3",
     "socket.io": "^2.2.0"
   }
 }
