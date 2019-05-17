@@ -2,7 +2,7 @@
 
 Connect-4 game using NodeJS and websockets.
 
-Here is the [*Demo*](https://connect-4-x.herokuapp.com)
+[*Demo*](https://connect-4-x.herokuapp.com)
 
 ## Getting Started
 
