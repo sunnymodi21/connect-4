@@ -19,11 +19,11 @@ class MongoDB{
     }
 
     getAllGames(){
-        this.db.collection("customers").find().toArray(function(err, docs) {
+        this.db.collection("games").find().toArray(function(err, docs) {
             if(err) {
                 console.log(err)
             } else {
-                console.log(docs[0])
+                console.log(docs)
             }
         })
     }
