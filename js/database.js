@@ -1,23 +1,36 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-
+var uri = process.env.DATABASE_URI || "mongodb://localhost:27017/";
 class MongoDB{
     constructor(){
         this.db = {}
     }
 
     async connect(dbName){
-        var db = await MongoClient.connect(url, {useNewUrlParser: true})
-        this.db = db.db("connect-4")
+        var db = await MongoClient.connect(uri, {useNewUrlParser: true})
+        this.db = db.db(dbName)
     }
 
-    async insert(myobj){
-        var myobj = { name: "Company Inc", address: "Highway 37" };
-        this.db.collection("customers").insertOne(myobj, function(err, res) {
-            if (err) throw err;
-            console.log("1 document inserted");
+    insert(final_matrix){
+        var xyz = this
+        this.db.collection("games").insertOne({final_matrix}, function(err, res) {
+            if (err) throw err
+            console.log("1 document inserted")
         });
+    }
+
+    getAllGames(){
+        this.db.collection("customers").find().toArray(function(err, docs) {
+            if(err) {
+                console.log(err)
+            } else {
+                console.log(docs[0])
+            }
+        })
+    }
+
+    async close(){
+        this.db.close()
     }
 } 
   
-module.exports = {MongoDB}
+module.exports = MongoDB
