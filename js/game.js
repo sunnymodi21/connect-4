@@ -94,6 +94,7 @@ Game.movePlayer = function(x){
         var popupImage;
         if(Game.winner == Client.my.id){
             popupImage = scene.add.image(300, 300, 'win')
+            Client.endGame(Game.connect_matrix)
         } else if(Game.winner == Client.otherPlayer.id){
             popupImage = scene.add.image(300, 300, 'lose')
         } else {

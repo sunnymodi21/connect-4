@@ -40,6 +40,10 @@ Client.socket.on('get-id',function(data){
     Client.my.id = data
 })
 
+Client.endGame = function(gameMatrix){
+    Client.socket.emit('endgame',{gameMatrix})
+}
+
 Client.socket.on('move',function(data){
     Game.movePlayer(data.x)
 })
