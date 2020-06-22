@@ -6,18 +6,6 @@ Connect-4 game using NodeJS and websockets.
 
 ## Getting Started
 
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
 ### Setting up the project
 
 In the project directory run
